@@ -24,6 +24,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /**
+ * For PUT/PATCH/DELETE
+ */
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
+/**
  * Sessions
  */
 const session = require('express-session');
