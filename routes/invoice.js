@@ -5,6 +5,21 @@ const cw = require('crypto-wallets');
 const qrcode = require('qrcode');
 
 /**
+ * GET /invoice
+ */
+router.get('/', (req, res, next) => {
+  models.Invoice.find({}).then(invoices => {
+
+    res.render('invoice/index', { invoices: invoices, messages: req.flash(), agent: req.user });
+
+  }).catch(err => {
+    req.flash('error', err.message);
+    res.redirect('/');
+  });
+});
+
+
+/**
  * GET /invoice/:id
  */
 router.get('/:id', (req, res, next) => {
@@ -15,7 +30,7 @@ router.get('/:id', (req, res, next) => {
         req.flash('error', err.message);
         return res.redirect('/');
       }
-      res.render('invoice/show', { invoice: invoice, messages: req.flash(), qr: url });
+      res.render('invoice/show', { invoice: invoice, messages: req.flash(), qr: url, agent: req.user });
     });
 
   }).catch(err => {

@@ -50,6 +50,46 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 
 /**
+ * Passport authentication
+ */
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+  },
+  function(email, password, done) {
+    models.Agent.findOne({ email: email }).then(agent => {
+      if (!agent) {
+        return done(null, false);
+      }
+      models.Agent.validPassword(password, agent.password, (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        return done(err, res);
+      }, agent);
+    }).catch(err => {
+      return done(err);
+    });
+
+  }));
+
+passport.serializeUser((agent, done) => {
+  done(null, agent._id);
+});
+
+passport.deserializeUser((id, done) => {
+  models.Agent.findById(id).then(agent => {
+    return done(null, agent);
+  }).catch(error => {
+    return done(error);
+  });
+});
+
+/**
  * Flash messages
  */
 const flash = require('connect-flash');
