@@ -12,6 +12,14 @@ cd basic-crypto-invoicing
 npm install
 ```
 
+Configure,
+
+```
+cp .env.example .env
+```
+
+The `.env.example` config is sufficient for development and testing.
+
 # Test
 
 ```
