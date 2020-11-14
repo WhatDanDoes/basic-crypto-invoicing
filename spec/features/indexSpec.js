@@ -55,7 +55,7 @@ describe('index', () => {
         browser.assert.success();
 
         browser.fill('#invoice-form input[name="recipient"]', 'Some Guy');
-        browser.fill('#invoice-form input[name="symbol"]', 'BTC');
+        browser.select('#invoice-form select[name="symbol"]', 'BTC');
         browser.fill('#invoice-form input[name="amount"]', 0.12);
 
         done();

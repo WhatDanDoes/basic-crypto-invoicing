@@ -1,6 +1,19 @@
 <% include _head %>
   <main>
-    <h1><a href='/'><%= process.env.TITLE %></a></h1>
+    <form id="invoice-form" action="/invoice" method="post">
+      <label for="symbol">Currency</label>
+      <select name="symbol">
+        <% for (let symbol of symbols) { %>
+          <option value="<%= symbol %>"><%= symbol %></option>
+        <% } %>
+      </select>
+      <label for="amount">Amount</label>
+      <input name="amount" type="number" />
+
+      <label for="recipient">Recipient</label>
+      <input name="recipient" type="text" />
+      <button type="submit">Submit</button>
+    </form>
   </main>
 <% include _footer %>
 
