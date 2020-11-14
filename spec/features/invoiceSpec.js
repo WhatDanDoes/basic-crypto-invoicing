@@ -93,5 +93,55 @@ describe('invoice', () => {
         });
       });
     });
+
+    describe('transaction confirmation', () => {
+      describe('no invoices', () => {
+        it('shows a message indicating that there are no invoices to confirm', done => {
+          browser.visit('/invoice', err => {
+            if (err) return done.fail(err);
+            browser.assert.text('No invoices');
+            done();
+          });
+        });
+      });
+
+      describe('pending invoices', () => {
+        beforeEach(done => {
+          browser.pressButton('Submit', err => {
+            if (err) return done.fail(err);
+            browser.assert.success();
+
+            done();
+          });
+        });
+
+        describe('unauthorized', () => {
+          it('redirects to /login', done => {
+            browser.visit('/invoice', err => {
+              if (err) return done.fail(err);
+              browser.assert.text('.alert.alert-danger', 'You need to login first');
+              browser.assert.url({ pathname: '/login' });
+              done();
+            });
+          });
+        });
+
+        describe('authorized', () => {
+          beforeEach(done => {
+            browser.visit('/invoice', err => {
+              if (err) return done.fail(err);
+              browser.assert.success();
+              done();
+            });
+          });
+
+          it('displays invoices with UI components', () => {
+            browser.assert.element('article.invoice');
+            browser.assert.element(`article.invoice form#confirm-invoice[action="/invoice/${invoice._id}?_method=PUT"]`);
+            browser.assert.element(`article.invoice form#delete-invoice[action="/invoice/${invoice._id}?_method=DELETE"]`);
+          });
+        });
+      });
+    });
   });
 });
