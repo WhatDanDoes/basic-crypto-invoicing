@@ -1,14 +1,17 @@
 require('dotenv').config();
 
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+const models = require('./models');
 
-var app = express();
+const indexRouter = require('./routes/index');
+const invoiceRouter = require('./routes/invoice');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,7 +23,34 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * Sessions
+ */
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
+const sessionConfig = {
+  name: process.env.TITLE,
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  unset: 'destroy',
+  cookie: {
+    maxAge: 1000 * 60 * 60,
+  },
+  store: new MongoStore({ mongooseConnection: models }),
+};
+
+app.use(session(sessionConfig));
+
+/**
+ * Flash messages
+ */
+const flash = require('connect-flash');
+app.use(flash());
+
 app.use('/', indexRouter);
+app.use('/invoice', invoiceRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

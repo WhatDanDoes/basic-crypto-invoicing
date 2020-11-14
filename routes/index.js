@@ -7,7 +7,7 @@ const symbols = process.env.CURRENCIES.split(',');
  * GET /
  */
 router.get('/', (req, res, next) => {
-  res.render('index', { symbols: symbols });
+  res.render('index', { symbols: symbols, messages: req.flash() });
 });
 
 module.exports = router;
