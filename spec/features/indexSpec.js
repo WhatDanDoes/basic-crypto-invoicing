@@ -77,27 +77,13 @@ describe('index', () => {
 
         models.Invoice.find({}).then(invoices => {
           expect(invoices.length).toEqual(1);
-          browser.assert.url({pathname: `/${invoice[0]._id}` });
+
+          browser.assert.url({pathname: `/invoice/${invoices[0]._id}` });
 
           done();
         }).catch(err => {
           done.fail(err);
         });
-      });
-    });
-
-    it('displays the payment request form', done => {
-      browser.pressButton('Submit', err => {
-        if (err) return done.fail(err);
-        browser.assert.success();
-
-        browser.assert.element('#public-qr');
-        browser.assert.element('#transaction-confirmation-form');
-        browser.assert.element('#transaction-confirmation-form input[name="contact"][type="email"]');
-        browser.assert.element('#transaction-confirmation-form input[name="transactionId"]');
-        browser.assert.element('#transaction-confirmation-form button[type="submit"]');
-
-        done();
       });
     });
 
@@ -112,11 +98,11 @@ describe('index', () => {
           models.Invoice.find({}).then(invoices => {
             expect(invoices.length).toEqual(1);
             expect(invoices[0].symbol).toEqual('BTC');
-            expect(invoices[0].publicKey).toBeDefined();
+            expect(invoices[0].address).toBeDefined();
             expect(invoices[0].privateKey).toBeDefined();
-            expect(invoices[0].amountDue).toEqual(0.12);
+            expect(invoices[0].amount).toEqual(0.12);
             expect(invoices[0].recipient).toEqual('Some Guy');
-            expect(invoices[0].transactionId).not.toBeDefined();
+            expect(invoices[0].transactionId).toEqual(null);
 
             done();
           }).catch(err => {
