@@ -10,7 +10,7 @@ module.exports = function(mongoose) {
       required: [true, 'No symbol supplied'],
       empty: [false, 'No symbol supplied'],
     },
-    publicKey: {
+    address: {
       type: String,
       trim: true,
       required: [true, 'No public address supplied'],
@@ -22,10 +22,10 @@ module.exports = function(mongoose) {
       required: [true, 'No private key supplied'],
       empty: [false, 'No private key supplied'],
     },
-    amountDue: {
+    amount: {
       type: Number,
-      required: [true, 'No amount due specified'],
-      empty: [false, 'No amount due specified'],
+      required: [true, 'No amount specified'],
+      empty: [false, 'No amount specified'],
     },
     recipient: {
       type: String,

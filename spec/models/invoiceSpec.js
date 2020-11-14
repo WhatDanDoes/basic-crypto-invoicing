@@ -9,9 +9,9 @@ describe('Invoice', () => {
   beforeEach(done => {
     invoice = new Invoice({
       symbol: 'BTC',
-      publicKey: 'some-pseudo-random-public-address',
+      address: 'some-pseudo-random-public-address',
       privateKey: 'some-pseudo-random-private-key',
-      amountDue: '1.0001',
+      amount: '1.0001',
       recipient: 'Some Name or Email',
     });
     done();
@@ -51,13 +51,13 @@ describe('Invoice', () => {
     });
 
     it('requires a public address', done => {
-      invoice.publicKey = undefined;
+      invoice.address = undefined;
 
       invoice.save().then(obj => {
         done.fail('This should not have saved');
       }).catch(error => {
         expect(Object.keys(error.errors).length).toEqual(1);
-        expect(error.errors['publicKey'].message).toEqual('No public address supplied');
+        expect(error.errors['address'].message).toEqual('No public address supplied');
         done();
       });
     });
@@ -75,25 +75,13 @@ describe('Invoice', () => {
     });
 
     it('requires an amount due', done => {
-      invoice.amountDue = undefined;
+      invoice.amount = undefined;
 
       invoice.save().then(obj => {
         done.fail('This should not have saved');
       }).catch(error => {
         expect(Object.keys(error.errors).length).toEqual(1);
-        expect(error.errors['amountDue'].message).toEqual('No amount due specified');
-        done();
-      });
-    });
-
-    it('requires an amount due', done => {
-      invoice.amountDue = undefined;
-
-      invoice.save().then(obj => {
-        done.fail('This should not have saved');
-      }).catch(error => {
-        expect(Object.keys(error.errors).length).toEqual(1);
-        expect(error.errors['amountDue'].message).toEqual('No amount due specified');
+        expect(error.errors['amount'].message).toEqual('No amount specified');
         done();
       });
     });
