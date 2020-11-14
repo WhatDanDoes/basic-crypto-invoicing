@@ -1,0 +1,28 @@
+{
+  "development": {
+    "username": "basic_crypto_invoicing",
+    "password": "secret",
+    "database": "basic_crypto_invoicing_development",
+    "host": "localhost"
+  },
+  "test": {
+    "username": "basic_crypto_invoicing",
+    "password": "secret",
+    "database": "basic_crypto_invoicing_test",
+    "host": "localhost"
+  },
+  "staging": {
+    "username": "basic_crypto_invoicing",
+    "password": "secret",
+    "database": "basic_crypto_invoicing_staging",
+    "host": "mongo",
+    "dialect": "mongodb"
+  },
+  "production": {
+    "username": "basic_crypto_invoicing",
+    "password": "secret",
+    "database": "basic_crypto_invoicing_production",
+    "host": "mongo",
+    "dialect": "mongodb"
+  }
+}
