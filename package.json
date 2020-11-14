@@ -21,6 +21,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^5.10.14",
     "morgan": "~1.9.1",
+    "passport": "^0.4.1",
     "qrcode": "^1.4.4"
   },
   "devDependencies": {
