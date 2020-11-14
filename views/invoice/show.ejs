@@ -1,5 +1,25 @@
 <% include ../_head %>
   <main>
+    <article id="deposit-instructions">
+      <header>
+        <% if (invoice.transactionId && !invoice.confirmed) { %>
+          A deposit of <%= invoice.amount %> <%= invoice.symbol %> to this address is awaiting confirmation
+        <% } else { %>
+          Deposit <%= invoice.amount %> <%= invoice.symbol %> to this address
+        <% } %>
+      </header>
+      <section id="qr">
+        <p><img src="<%= qr %>"></p>
+        <p>Submit the transaction ID and payment will be accepted as soon as it is confirmed.</p>
+      </section>
+      <footer>
+        <form id="transaction-confirmation-form" action="/invoice/<%= invoice._id %>?_method=PATCH" method="post">
+          <label for="transactionId">Transaction ID</label>
+          <input name="transactionId" type="text" />
+          <button type="submit">Submit</button>
+        </form>
+      </footer>
+    </article>
   </main>
 <% include ../_footer %>
 

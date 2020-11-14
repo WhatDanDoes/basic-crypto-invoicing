@@ -74,7 +74,7 @@ describe('invoice', () => {
     it('provides a friendly confirmation screen and displays processing status', done => {
       browser.pressButton('Submit', err => {
         if (err) return done.fail(err);
-        browser.assert.text('.alert.alert-success', 'Transaction notification received and is now being verified');
+        browser.assert.text('.alert.alert-success', 'Transaction notification received');
         browser.assert.text('#deposit-instructions header', `A deposit of ${invoice.amount} ${invoice.symbol} to this address is awaiting confirmation`);
         done();
       });
@@ -84,7 +84,7 @@ describe('invoice', () => {
       expect(invoice.transactionId).toEqual(null);
       browser.pressButton('Submit', err => {
         if (err) return done.fail(err);
-        models.Invoice.findOne({ _id: invoice._id }).then(inv => {
+        models.Invoice.findOne({ _id: invoice._id }).then(invoice => {
           expect(invoice.transactionId).not.toEqual(null);
           expect(typeof invoice.transactionId).toEqual('string');
           done();

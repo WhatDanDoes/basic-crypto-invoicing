@@ -16,7 +16,8 @@ router.get('/:id', (req, res, next) => {
         return res.redirect('/');
       }
       res.render('invoice/show', { invoice: invoice, messages: req.flash(), qr: url });
-    })
+    });
+
   }).catch(err => {
     req.flash('error', err.message);
     res.redirect('/');
@@ -36,5 +37,28 @@ router.post('/', (req, res, next) => {
     res.redirect('/');
   });
 });
+
+
+/**
+ * PATCH /invoice/:id
+ */
+router.patch('/:id', (req, res, next) => {
+  models.Invoice.findOne({ _id: req.params.id}).then(invoice => {
+
+    invoice.transactionId = req.body.transactionId;
+
+    invoice.save().then(invoice => {
+      req.flash('success', 'Transaction notification received');
+      res.redirect(`/invoice/${invoice._id}`);
+    }).catch(err => {
+      req.flash('error', err.message);
+      res.redirect('/');
+    });
+  }).catch(err => {
+    req.flash('error', err.message);
+    res.redirect('/');
+  });
+});
+
 
 module.exports = router;
