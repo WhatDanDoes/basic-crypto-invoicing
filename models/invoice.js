@@ -3,7 +3,7 @@
 module.exports = function(mongoose) {
   const Schema = mongoose.Schema;
 
-  const WalletSchema = new Schema({
+  const InvoiceSchema = new Schema({
     symbol: {
       type: String,
       trim: true,
@@ -26,5 +26,5 @@ module.exports = function(mongoose) {
     timestamps: true
   });
 
-  return WalletSchema;
+  return InvoiceSchema;
 };

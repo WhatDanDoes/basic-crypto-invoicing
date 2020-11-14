@@ -1,13 +1,13 @@
 'use strict';
 
-describe('Wallet', () => {
+describe('Invoice', () => {
   const db = require('../../models');
-  const Wallet = db.Wallet;
+  const Invoice = db.Invoice;
 
-  let wallet;
+  let invoice;
 
   beforeEach(done => {
-    wallet = new Wallet({
+    invoice = new Invoice({
       symbol: 'BTC',
       publicKey: 'some-pseudo-random-public-address',
       privateKey: 'some-pseudo-random-private-key',
@@ -25,11 +25,11 @@ describe('Wallet', () => {
 
   describe('basic validation', () => {
     it('sets the createdAt and updatedAt fields', done => {
-      expect(wallet.createdAt).toBe(undefined);
-      expect(wallet.updatedAt).toBe(undefined);
-      wallet.save().then(obj => {
-        expect(wallet.createdAt instanceof Date).toBe(true);
-        expect(wallet.updatedAt instanceof Date).toBe(true);
+      expect(invoice.createdAt).toBe(undefined);
+      expect(invoice.updatedAt).toBe(undefined);
+      invoice.save().then(obj => {
+        expect(invoice.createdAt instanceof Date).toBe(true);
+        expect(invoice.updatedAt instanceof Date).toBe(true);
         done();
       }).catch(err => {
         done.fail(err);
@@ -37,9 +37,9 @@ describe('Wallet', () => {
     });
 
     it('requires a symbol', done => {
-      wallet.symbol = undefined;
+      invoice.symbol = undefined;
 
-      wallet.save().then(obj => {
+      invoice.save().then(obj => {
         done.fail('This should not have saved');
       }).catch(error => {
         expect(Object.keys(error.errors).length).toEqual(1);
@@ -49,9 +49,9 @@ describe('Wallet', () => {
     });
 
     it('requires a public address', done => {
-      wallet.publicKey = undefined;
+      invoice.publicKey = undefined;
 
-      wallet.save().then(obj => {
+      invoice.save().then(obj => {
         done.fail('This should not have saved');
       }).catch(error => {
         expect(Object.keys(error.errors).length).toEqual(1);
@@ -61,9 +61,9 @@ describe('Wallet', () => {
     });
 
     it('requires a private key', done => {
-      wallet.privateKey = undefined;
+      invoice.privateKey = undefined;
 
-      wallet.save().then(obj => {
+      invoice.save().then(obj => {
         done.fail('This should not have saved');
       }).catch(error => {
         expect(Object.keys(error.errors).length).toEqual(1);
