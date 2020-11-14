@@ -37,6 +37,10 @@ module.exports = function(mongoose) {
       type: String,
       default: null,
     },
+    confirmed: {
+      type: Boolean,
+      default: false,
+    },
   }, {
     timestamps: true
   });
