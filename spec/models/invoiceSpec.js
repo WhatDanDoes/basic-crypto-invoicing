@@ -112,5 +112,20 @@ describe('Invoice', () => {
         done.fail(err);
       });
     });
+
+    it('initializes a false confirmation field', done => {
+      invoice.save().then(obj => {
+        expect(invoice.confirmed).toBe(false);
+        invoice.confirmed = true;
+        invoice.save().then(obj => {
+          expect(invoice.confirmed).toBe(true);
+          done();
+        }).catch(err => {
+          done.fail(err);
+        });
+      }).catch(err => {
+        done.fail(err);
+      });
+    });
   });
 });
