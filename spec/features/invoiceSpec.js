@@ -58,7 +58,7 @@ describe('invoice', () => {
     browser.assert.element('#transaction-confirmation-form button[type="submit"]');
   });
 
-  describe('transaction confirmation', () => {
+  describe('transaction ID submission', () => {
     beforeEach(() => {
       browser.fill('#transaction-confirmation-form input[name="transactionId"]', 'some-transaction-id');
     });
