@@ -47,25 +47,51 @@ describe('invoice', () => {
   });
 
   it('displays payment information with QR code and transaction ID input form', () => {
-    browser.assert.element('#public-qr');
+    browser.assert.element('#deposit-instructions');
+    browser.assert.text('#deposit-instructions header', `Deposit ${invoice.amount} ${invoice.symbol} to this address`);
+    browser.assert.element('#deposit-instructions section#qr img');
+    browser.assert.text('#deposit-instructions section#qr', 'Submit the transaction ID and payment will be accepted as soon as it is confirmed.');
+
     browser.assert.element('#transaction-confirmation-form');
-    browser.assert.element('#transaction-confirmation-form input[name="contact"][type="email"]');
-    browser.assert.element('#transaction-confirmation-form input[name="transactionId"]');
+    browser.assert.element(`form#transaction-confirmation-form[action="/invoice/${invoice._id}?_method=PATCH"]`);
+    browser.assert.element('#transaction-confirmation-form input[name="transactionId"][type="text"]');
     browser.assert.element('#transaction-confirmation-form button[type="submit"]');
   });
 
   describe('transaction confirmation', () => {
-    it('lands in the right spot', done => {
-      done.fail();
+    beforeEach(() => {
+      browser.fill('#transaction-confirmation-form input[name="transactionId"]', 'some-transaction-id');
     });
 
-    it('provides a friendly confirmation screen', done => {
-      browser.assert.text('.alert.alert-success', 'Transaction notification received');
-      done.fail();
+    it('lands in the right spot', done => {
+      browser.pressButton('Submit', err => {
+        if (err) return done.fail(err);
+        browser.assert.url({pathname: `/invoice/${invoice._id}` });
+        done();
+      });
+    });
+
+    it('provides a friendly confirmation screen and displays processing status', done => {
+      browser.pressButton('Submit', err => {
+        if (err) return done.fail(err);
+        browser.assert.text('.alert.alert-success', 'Transaction notification received and is now being verified');
+        browser.assert.text('#deposit-instructions header', `A deposit of ${invoice.amount} ${invoice.symbol} to this address is awaiting confirmation`);
+        done();
+      });
     });
 
     it('sets the transaction ID in the database', done => {
-      done.fail();
+      expect(invoice.transactionId).toEqual(null);
+      browser.pressButton('Submit', err => {
+        if (err) return done.fail(err);
+        models.Invoice.findOne({ _id: invoice._id }).then(inv => {
+          expect(invoice.transactionId).not.toEqual(null);
+          expect(typeof invoice.transactionId).toEqual('string');
+          done();
+        }).catch(err => {
+          done.fail(err);
+        });
+      });
     });
   });
 });
