@@ -22,6 +22,21 @@ module.exports = function(mongoose) {
       required: [true, 'No private key supplied'],
       empty: [false, 'No private key supplied'],
     },
+    amountDue: {
+      type: Number,
+      required: [true, 'No amount due specified'],
+      empty: [false, 'No amount due specified'],
+    },
+    recipient: {
+      type: String,
+      trim: true,
+      required: [true, 'Who is the recipient?'],
+      empty: [false, 'Who is the recipient?'],
+    },
+    transactionId: {
+      type: String,
+      default: null,
+    },
   }, {
     timestamps: true
   });
