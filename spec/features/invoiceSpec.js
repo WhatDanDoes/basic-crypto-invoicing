@@ -181,10 +181,111 @@ describe('invoice', () => {
           it('displays invoices with UI components', () => {
             browser.assert.element('article.invoice');
             browser.assert.text('article.invoice header', `${invoice.amount} ${invoice.symbol} invoiced to ${invoice.recipient}`);
+            browser.assert.element(`article.invoice header a[href="/invoice/${invoice._id}"]`);
             browser.assert.element(`article.invoice aside form.confirm-invoice[action="/invoice/${invoice._id}?_method=PUT"]`);
             browser.assert.text(`article.invoice aside form.confirm-invoice button[type="submit"]`, 'Confirm');
             browser.assert.element(`article.invoice aside form.delete-invoice[action="/invoice/${invoice._id}?_method=DELETE"]`);
             browser.assert.text(`article.invoice aside form.delete-invoice button[type="submit"]`, 'Delete');
+          });
+
+          describe('confirming', () => {
+            it('lands in the right place', done => {
+              browser.pressButton('Confirm', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                browser.assert.url({ pathname: '/invoice' });
+                done();
+              });
+            });
+
+            it('updates the database status', done => {
+              expect(invoice.confirmed).toBe(false);
+              browser.pressButton('Confirm', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                model.Invoice.find({}).then(invoices => {
+                  expect(invoices.length).toEqual(1);
+                  expect(invoices[0].confirmed).toBe(true);
+
+                  done();
+                }).catch(err => {
+                  done.fail(err);
+                });
+              });
+            });
+
+            it('toggles the confirmed status', done => {
+              expect(invoice.confirmed).toBe(false);
+              browser.pressButton('Confirm', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                model.Invoice.find({}).then(invoices => {
+                  expect(invoices.length).toEqual(1);
+                  expect(invoices[0].confirmed).toBe(true);
+
+                  browser.pressButton('De-confirm', err => {
+                    if (err) done.fail(err);
+                    browser.assert.success();
+
+                    model.Invoice.find({}).then(invoices => {
+                      expect(invoices.length).toEqual(1);
+                      expect(invoices[0].confirmed).toBe(true);
+
+                      done();
+                    }).catch(err => {
+                      done.fail(err);
+                    });
+                  }).catch(err => {
+                    done.fail(err);
+                  });
+                }).catch(err => {
+                  done.fail(err);
+                });
+              });
+            });
+
+            it('shows the status on the UI', done => {
+              browser.pressButton('Confirm', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                model.Invoice.find({}).then(invoices => {
+                  expect(invoices.length).toEqual(1);
+                  expect(invoices[0].confirmed).toBe(true);
+
+                  done();
+                }).catch(err => {
+                  done.fail(err);
+                });
+              });
+            });
+          });
+
+          describe('deleting', () => {
+            it('lands in the right place', done => {
+              browser.pressButton('Delete', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                browser.assert.url({ pathname: '/invoice' });
+                done();
+              });
+            });
+
+            it('displays a confirmation dialog', done => {
+              done.fail();
+            });
+
+            it('removes the record from the database', done => {
+              done.fail();
+            });
+
+            it('removes the record from the UI', done => {
+              done.fail();
+            });
           });
         });
       });
