@@ -3,6 +3,7 @@ const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 Browser.localhost('example.com', PORT);
 const app = require('../../app');
 const models = require('../../models');
+const request = require('supertest');
 
 describe('invoice', () => {
   const browser = new Browser();
@@ -155,6 +156,36 @@ describe('invoice', () => {
               browser.assert.text('.alert.alert-danger', 'You need to login first');
               browser.assert.url({ pathname: '/login' });
               done();
+            });
+          });
+
+          describe('confirming', () => {
+            it('is not allowed', done => {
+              request(app)
+                .put(`/invoice/${invoice._id}`)
+                .set('Accept', 'application/json')
+                .expect(403)
+                .end((err, res) => {
+                  if (err) done.fail(err);
+
+                  expect(res.body.message).toEqual('You need to login first');
+                  done();
+                });
+            });
+          });
+
+          describe('deleting', () => {
+            it('is not allowed', done => {
+              request(app)
+                .delete(`/invoice/${invoice._id}`)
+                .set('Accept', 'application/json')
+                .expect(403)
+                .end((err, res) => {
+                  if (err) done.fail(err);
+
+                  expect(res.body.message).toEqual('You need to login first');
+                  done();
+                });
             });
           });
         });

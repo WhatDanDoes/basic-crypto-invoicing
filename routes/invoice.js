@@ -84,6 +84,11 @@ router.patch('/:id', (req, res, next) => {
  * PUT /invoice/:id
  */
 router.put('/:id', (req, res, next) => {
+  if (!req.user) {
+    req.flash('error', 'You need to login first');
+    return res.status(403).json({ message: 'You need to login first' });
+  }
+
   models.Invoice.findOne({ _id: req.params.id}).then(invoice => {
 
     invoice.confirmed = !invoice.confirmed;
@@ -105,6 +110,11 @@ router.put('/:id', (req, res, next) => {
  * DELETE /invoice/:id
  */
 router.delete('/:id', (req, res, next) => {
+  if (!req.user) {
+    req.flash('error', 'You need to login first');
+    return res.status(403).json({ message: 'You need to login first' });
+  }
+
   models.Invoice.deleteOne({ _id: req.params.id }).then(results => {
     req.flash('success', 'Invoice deleted');
     res.redirect('/invoice');
