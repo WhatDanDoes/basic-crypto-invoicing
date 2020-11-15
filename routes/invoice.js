@@ -80,5 +80,39 @@ router.patch('/:id', (req, res, next) => {
   });
 });
 
+/**
+ * PUT /invoice/:id
+ */
+router.put('/:id', (req, res, next) => {
+  models.Invoice.findOne({ _id: req.params.id}).then(invoice => {
+
+    invoice.confirmed = !invoice.confirmed;
+
+    invoice.save().then(invoice => {
+      req.flash('success', 'Transaction updated');
+      res.redirect(`/invoice`);
+    }).catch(err => {
+      req.flash('error', err.message);
+      res.redirect('/');
+    });
+  }).catch(err => {
+    req.flash('error', err.message);
+    res.redirect('/');
+  });
+});
+
+/**
+ * DELETE /invoice/:id
+ */
+router.delete('/:id', (req, res, next) => {
+  models.Invoice.deleteOne({ _id: req.params.id }).then(results => {
+    req.flash('success', 'Invoice deleted');
+    res.redirect('/invoice');
+  }).catch(error => {
+    req.flash('error', error.message);
+    res.redirect('/invoice');
+  });
+});
+
 
 module.exports = router;

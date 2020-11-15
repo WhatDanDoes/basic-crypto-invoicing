@@ -205,7 +205,7 @@ describe('invoice', () => {
                 if (err) done.fail(err);
                 browser.assert.success();
 
-                model.Invoice.find({}).then(invoices => {
+                models.Invoice.find({}).then(invoices => {
                   expect(invoices.length).toEqual(1);
                   expect(invoices[0].confirmed).toBe(true);
 
@@ -222,7 +222,7 @@ describe('invoice', () => {
                 if (err) done.fail(err);
                 browser.assert.success();
 
-                model.Invoice.find({}).then(invoices => {
+                models.Invoice.find({}).then(invoices => {
                   expect(invoices.length).toEqual(1);
                   expect(invoices[0].confirmed).toBe(true);
 
@@ -230,16 +230,14 @@ describe('invoice', () => {
                     if (err) done.fail(err);
                     browser.assert.success();
 
-                    model.Invoice.find({}).then(invoices => {
+                    models.Invoice.find({}).then(invoices => {
                       expect(invoices.length).toEqual(1);
-                      expect(invoices[0].confirmed).toBe(true);
+                      expect(invoices[0].confirmed).toBe(false);
 
                       done();
                     }).catch(err => {
                       done.fail(err);
                     });
-                  }).catch(err => {
-                    done.fail(err);
                   });
                 }).catch(err => {
                   done.fail(err);
@@ -252,7 +250,7 @@ describe('invoice', () => {
                 if (err) done.fail(err);
                 browser.assert.success();
 
-                model.Invoice.find({}).then(invoices => {
+                models.Invoice.find({}).then(invoices => {
                   expect(invoices.length).toEqual(1);
                   expect(invoices[0].confirmed).toBe(true);
 
@@ -275,16 +273,38 @@ describe('invoice', () => {
               });
             });
 
-            it('displays a confirmation dialog', done => {
-              done.fail();
-            });
-
             it('removes the record from the database', done => {
-              done.fail();
+              models.Invoice.find({}).then(invoices => {
+                expect(invoices.length).toEqual(1);
+
+                browser.pressButton('Delete', err => {
+                  if (err) done.fail(err);
+                  browser.assert.success();
+
+                  models.Invoice.find({}).then(invoices => {
+                    expect(invoices.length).toEqual(0);
+
+                    done();
+                  }).catch(err => {
+                    done.fail(err);
+                  });
+                });
+              }).catch(err => {
+                done.fail(err);
+              });
             });
 
             it('removes the record from the UI', done => {
-              done.fail();
+              browser.assert.element('article.invoice');
+
+              browser.pressButton('Delete', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                browser.assert.elements('article.invoice', 0);
+
+                done();
+              });
             });
           });
         });
