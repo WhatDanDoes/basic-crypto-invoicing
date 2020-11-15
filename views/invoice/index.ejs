@@ -1,5 +1,24 @@
 <% include ../_head %>
   <main>
+    <% if (invoices.length) { %>
+      <% for (let invoice of invoices) { %>
+        <article class="invoice">
+          <header>
+            <%= `${invoice.amount} ${invoice.symbol} invoiced to ${invoice.recipient}` %>
+          </header>
+          <aside>
+            <form class="confirm-invoice" action="/invoice/<%= invoice._id %>?_method=PUT" method="post">
+              <button type="submit">Confirm</button>
+            </form>
+            <form class="delete-invoice" action="/invoice/<%= invoice._id %>?_method=DELETE" method="post">
+              <button type="submit">Delete</button>
+            </form>
+          </aside>
+        </article>
+      <% } %>
+    <% } else { %>
+      <h1>No invoices</h1>
+    <% } %>
   </main>
 <% include ../_footer %>
 

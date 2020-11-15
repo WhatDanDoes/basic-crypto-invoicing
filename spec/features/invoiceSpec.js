@@ -95,23 +95,56 @@ describe('invoice', () => {
     });
 
     describe('transaction confirmation', () => {
+
       describe('no invoices', () => {
+        let agent;
+        beforeEach(done => {
+          models.mongoose.connection.db.dropDatabase().then(result => {
+            models.Agent.create({ email: 'someguy@example.com', password: 'secret' }).then(result => {
+              agent = result;
+
+              browser.visit('/login', err => {
+                browser.fill('email', agent.email);
+                browser.fill('password', 'secret');
+
+                browser.pressButton('Login', err => {
+                  if (err) done.fail(err);
+                  browser.assert.success();
+
+                  done();
+                });
+              });
+            }).catch(err => {
+              done.fail(err);
+            });
+          }).catch(error => {
+            done.fail(error);
+          });
+        });
+
         it('shows a message indicating that there are no invoices to confirm', done => {
           browser.visit('/invoice', err => {
             if (err) return done.fail(err);
-            browser.assert.text('No invoices');
+            browser.assert.text('main h1', 'No invoices');
             done();
           });
         });
       });
 
       describe('pending invoices', () => {
+        let agent;
         beforeEach(done => {
           browser.pressButton('Submit', err => {
             if (err) return done.fail(err);
             browser.assert.success();
 
-            done();
+            models.Agent.create({ email: 'someguy@example.com', password: 'secret' }).then(result => {
+              agent = result;
+
+              done();
+            }).catch(err => {
+              done.fail(err);
+            });
           });
         });
 
@@ -128,17 +161,30 @@ describe('invoice', () => {
 
         describe('authorized', () => {
           beforeEach(done => {
-            browser.visit('/invoice', err => {
-              if (err) return done.fail(err);
-              browser.assert.success();
-              done();
+            browser.visit('/login', err => {
+              browser.fill('email', agent.email);
+              browser.fill('password', 'secret');
+
+              browser.pressButton('Login', err => {
+                if (err) done.fail(err);
+                browser.assert.success();
+
+                browser.visit('/invoice', err => {
+                  if (err) return done.fail(err);
+                  browser.assert.success();
+                  done();
+                });
+              });
             });
           });
 
           it('displays invoices with UI components', () => {
             browser.assert.element('article.invoice');
-            browser.assert.element(`article.invoice form#confirm-invoice[action="/invoice/${invoice._id}?_method=PUT"]`);
-            browser.assert.element(`article.invoice form#delete-invoice[action="/invoice/${invoice._id}?_method=DELETE"]`);
+            browser.assert.text('article.invoice header', `${invoice.amount} ${invoice.symbol} invoiced to ${invoice.recipient}`);
+            browser.assert.element(`article.invoice aside form.confirm-invoice[action="/invoice/${invoice._id}?_method=PUT"]`);
+            browser.assert.text(`article.invoice aside form.confirm-invoice button[type="submit"]`, 'Confirm');
+            browser.assert.element(`article.invoice aside form.delete-invoice[action="/invoice/${invoice._id}?_method=DELETE"]`);
+            browser.assert.text(`article.invoice aside form.delete-invoice button[type="submit"]`, 'Delete');
           });
         });
       });

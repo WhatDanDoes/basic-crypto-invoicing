@@ -8,6 +8,11 @@ const qrcode = require('qrcode');
  * GET /invoice
  */
 router.get('/', (req, res, next) => {
+  if (!req.user) {
+    req.flash('error', 'You need to login first');
+    return res.redirect('/login');
+  }
+
   models.Invoice.find({}).then(invoices => {
 
     res.render('invoice/index', { invoices: invoices, messages: req.flash(), agent: req.user });
