@@ -4,7 +4,7 @@
       <% for (let invoice of invoices) { %>
         <article class="invoice">
           <header>
-            <%= `${invoice.amount} ${invoice.symbol} invoiced to ${invoice.recipient}` %>
+            <a href="/invoice/<%= invoice._id %>"><%= `${invoice.amount} ${invoice.symbol} invoiced to ${invoice.recipient}` %></a>
           </header>
           <aside>
             <form class="confirm-invoice" action="/invoice/<%= invoice._id %>?_method=PUT" method="post">
