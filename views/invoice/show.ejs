@@ -10,14 +10,18 @@
       </header>
       <section id="qr">
         <p><img src="<%= qr %>"></p>
-        <p>Submit the transaction ID and payment will be accepted as soon as it is confirmed.</p>
+        <% if (!invoice.transactionId) { %>
+          <p>Submit the transaction ID and payment will be accepted as soon as it is confirmed.</p>
+        <% } %>
       </section>
       <footer>
-        <form id="transaction-confirmation-form" action="/invoice/<%= invoice._id %>?_method=PATCH" method="post">
-          <label for="transactionId">Transaction ID</label>
-          <input name="transactionId" type="text" />
-          <button type="submit">Submit</button>
-        </form>
+        <% if (!invoice.transactionId) { %>
+          <form id="transaction-confirmation-form" action="/invoice/<%= invoice._id %>?_method=PATCH" method="post">
+            <label for="transactionId">Transaction ID</label>
+            <input name="transactionId" type="text" />
+            <button type="submit">Submit</button>
+          </form>
+        <% } %>
       </footer>
     </article>
   </main>

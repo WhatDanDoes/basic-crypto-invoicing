@@ -95,6 +95,20 @@ describe('invoice', () => {
       });
     });
 
+    it('does not display the transaction ID submission form', done => {
+      browser.assert.element('#transaction-confirmation-form');
+      browser.pressButton('Submit', err => {
+        if (err) return done.fail(err);
+        models.Invoice.findOne({ _id: invoice._id }).then(invoice => {
+          browser.assert.elements('#transaction-confirmation-form', 0);
+          browser.assert.text('#deposit-instructions section#qr', '');
+          done();
+        }).catch(err => {
+          done.fail(err);
+        });
+      });
+    });
+
     describe('transaction confirmation', () => {
 
       describe('no invoices', () => {
