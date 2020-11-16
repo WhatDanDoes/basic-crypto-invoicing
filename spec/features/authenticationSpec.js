@@ -108,8 +108,9 @@ describe('authentication', () => {
         browser.assert.url({ pathname: '/invoice' });
       });
 
-      it('displays a logout link', () => {
+      it('displays a nav menu', () => {
         browser.assert.element('a[href="/logout"]');
+        browser.assert.element('a[href="/invoice"]');
       });
 
       it('/login redirects to /invoice', done => {
