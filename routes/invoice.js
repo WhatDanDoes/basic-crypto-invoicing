@@ -30,7 +30,7 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   models.Invoice.findOne({ _id: req.params.id}).then(invoice => {
 
-    qrcode.toDataURL('I am a pony!', (err, url) => {
+    qrcode.toDataURL(invoice.address, (err, url) => {
       if (err) {
         req.flash('error', err.message);
         return res.redirect('/');
