@@ -1,18 +1,25 @@
 <% include _head %>
   <main>
     <form id="invoice-form" action="/invoice" method="post">
-      <label for="symbol">Currency</label>
-      <select name="symbol">
-        <% for (let symbol of symbols) { %>
-          <option value="<%= symbol %>"><%= symbol %></option>
-        <% } %>
-      </select>
-      <label for="amount">Amount</label>
-      <input name="amount" type="number" step="any" min=0 />
-
-      <label for="recipient">Recipient</label>
-      <input name="recipient" type="text" />
-      <button type="submit">Submit</button>
+      <section>
+        <label for="symbol">Currency</label>
+        <select name="symbol">
+          <% for (let symbol of symbols) { %>
+            <option value="<%= symbol %>"><%= symbol %></option>
+          <% } %>
+        </select>
+      </section>
+      <section>
+        <label for="amount">Amount</label>
+        <input name="amount" type="number" step="any" min=0 />
+      </section>
+      <section>
+        <label for="recipient">Recipient</label>
+        <input name="recipient" type="text" />
+      </section>
+      <section>
+        <button type="submit">Submit</button>
+      </section>
     </form>
   </main>
 <% include _footer %>

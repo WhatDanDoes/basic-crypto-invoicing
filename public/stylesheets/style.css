@@ -102,3 +102,35 @@ article.invoice aside form button {
   padding: 0.5em;
   font-size: .5em;
 }
+
+/**
+ * Forms
+ */
+form section {
+  font-size: 1.5em;
+  margin: 2em;
+  text-align: center;
+}
+
+form section label {
+  display: block;
+}
+
+form section input,
+form section select {
+  font-size: 1.5em;
+}
+
+form section input {
+  width: 100%;
+}
+
+input[type="number"] {
+  text-align: right;
+}
+
+form button {
+  padding: 0.5em;
+  font-size: 1.5em;
+}
+
