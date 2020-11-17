@@ -7,11 +7,11 @@
             <a href="/invoice/<%= invoice._id %>"><%= `${invoice.amount} ${invoice.symbol} invoiced to ${invoice.recipient}` %></a>
           </header>
           <aside>
-            <form class="confirm-invoice" action="/invoice/<%= invoice._id %>?_method=PUT" method="post">
-              <button type="submit"><%= invoice.confirmed ? 'De-confirm' : 'Confirm' %></button>
-            </form>
             <form class="delete-invoice" action="/invoice/<%= invoice._id %>?_method=DELETE" method="post">
               <button type="submit">Delete</button>
+            </form>
+            <form class="confirm-invoice" action="/invoice/<%= invoice._id %>?_method=PUT" method="post">
+              <button type="submit"><%= invoice.confirmed ? 'De-confirm' : 'Confirm' %></button>
             </form>
           </aside>
         </article>

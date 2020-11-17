@@ -1,8 +1,104 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0;
+  font: "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
+  text-decoration: none;
   color: #00B7FF;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+main {
+  margin: 1em;
+}
+
+/**
+ * header#page
+ */
+#page {
+  padding: 0.25em;
+}
+
+#page h1 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+#page nav {
+  margin: 0;
+  top: 1em;
+  right: 1em;
+  position: absolute;
+  color: #d7d7d7;
+  font-size: 0.75em;
+}
+
+nav ul {
+  margin: 0;
+  list-style-type: none;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  margin: 0.25em;
+  padding: 0.25em;
+}
+
+nav ul li a:hover {
+  background: #00B7FF;
+  color: #FFF;
+  border-radius: 3px;
+}
+
+@media (min-width: 750px) {
+  #page h1 {
+    margin: .5em;
+    font-size: 1.5em;
+  }
+
+  #page nav {
+    font-size: 1.4em;
+  }
+
+  #page nav ul li {
+    margin: .5em;
+  }
+
+  nav ul li a:hover {
+    background: #00B7FF;
+    color: #FFF;
+    border-radius: 3px;
+  }
+}
+
+/**
+ * Invoice index
+ */
+article.invoice {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 2em;
+}
+
+article.invoice aside {
+  margin: 0 1em;
+  text-align: center;
+}
+
+article.invoice aside form {
+  display: inline;
+  margin-left: .25em;
+  margin-right: .25em;
+}
+
+article.invoice aside form button {
+  padding: 0.5em;
+  font-size: .5em;
 }
